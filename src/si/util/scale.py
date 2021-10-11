@@ -28,7 +28,11 @@ class StandardScaler:
         ----------
         dataset : A Dataset object to be standardized
         """
-        pass
+        self.mean = np.mean(dataset.X, axis=0)
+        #[int or tuples of int]axis along which we want to calculate the arithmetic mean. 
+        #Otherwise, it will consider arr to be flattened(works on allthe axis). 
+        #axis = 0 means along the column and axis = 1 means working along the row.
+        self.var = np.var(dataset.X, axis=0)
 
     def transform(self, dataset, inline=False):
         """
@@ -41,7 +45,16 @@ class StandardScaler:
         -------
         A Dataset object with standardized data.
         """
-        pass
+        #The observation (X), the mean (μ) and the standard deviation (σ) 
+        #X – μ / σ
+        Z = (dataset.X - self.mean)/np.sqrt(self.var)
+        if inline:
+            #inline: neste contexto significa que vou aplicar as alteracoes ao mesmo dataset 
+            #(True: mesmo dataset, False:dif dataset)
+            dataset.X = Z
+            return dataset
+        else:
+            return Dataset(Z, copy(dataset.Y), copy(dataset.xnames), copy(dataset.yname))
 
     def fit_transform(self, dataset, inline=False):
         """

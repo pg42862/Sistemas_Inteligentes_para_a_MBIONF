@@ -11,8 +11,8 @@ class Dataset:
         """ Tabular Dataset"""
         if X is None:
             raise Exception("Trying to instanciate a DataSet without any data")
-        self.X = X
-        self.Y = Y
+        self.X = X#linhas
+        self.Y = Y#colunas
         self._xnames = xnames if xnames else label_gen(X.shape[1])
         self._yname = yname if yname else 'Y'
 
@@ -27,7 +27,13 @@ class Dataset:
         :return: A DataSet object
         :rtype: DataSet
         """
-        data = np.genfromtxt(filename, delimiter=sep)
+        data = np.genfromtxt(filename, delimiter=sep)#Numpy genfromtxt() to load the data from the text files, with missing values handled as specified.
+        #fname: It is the file, filename, list, string, list of string, or generator to read. 
+        #If the filename is with the extension gz or bz2, then the file is decompressed. 
+        #Note: that generator should always return byte strings. 
+        #Strings in the list are treated as lines.
+        #delimiter: optional. This is the string used to separate the values by default, any consecutive 
+        #whitespace that occurs acts as a delimiter.
         if labeled:
             X = data[:, 0:-1]
             Y = data[:, -1]
@@ -47,7 +53,16 @@ class Dataset:
         :return: [description]
         :rtype: [type]
         """
-        pass
+        if ylabel is not None and ylabel in df.columns:
+            X = df.loc[:,df.columns != ylabel].to_numpy()
+            Y = df.loc[:,ylabel].to_numpy() #ou df.loc[:,df.columns == ylabel].to_numpy()
+            xnames = df.columns.to_list().remove(ylabel)
+            ynames = ylabel
+        else:
+            X = df.to_numpy()
+            Y = None
+            xnames = df.columns.tolist()
+            yname = None
 
     def __len__(self):
         """Returns the number of data points."""
@@ -55,15 +70,15 @@ class Dataset:
 
     def hasLabel(self):
         """Returns True if the dataset constains labels (a dependent variable)"""
-        pass
+        return self.Y
 
     def getNumFeatures(self):
         """Returns the number of features"""
-        pass
+        self.X.shape[1]
 
     def getNumClasses(self):
         """Returns the number of label classes or 0 if the dataset has no dependent variable."""
-        pass
+        return len(np.unique(self.Y)) if self.hasLabel() else 0
 
     def writeDataset(self, filename, sep=","):
         """Saves the dataset to a file
