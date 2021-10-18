@@ -88,10 +88,16 @@ class Dataset:
         :param sep: The fields separator, defaults to ","
         :type sep: str, optional
         """
+        if dataset.hasLabel():
+            fullds = np.hstack((self.X, self.Y.reshape(len(self.Y), 1)))
+            np.savetxt(filename, fullds, delimiter=sep)
+        else:
+            fullds = dataset.X
+            columns = dataset._xnames[:]
+        _means = np.mean()
 
-        fullds = np.hstack((self.X, self.Y.reshape(len(self.Y), 1)))
-        np.savetxt(filename, fullds, delimiter=sep)
-
+        #fullds = np.hstack((self.X, self.Y.reshape(len(self.Y), 1)))
+        #np.savetxt(filename, fullds, delimiter=sep)
     def toDataframe(self):
         """ Converts the dataset into a pandas DataFrame"""
         pass
