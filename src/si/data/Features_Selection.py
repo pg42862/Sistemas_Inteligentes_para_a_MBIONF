@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 from  copy import copy
 import warnings
-
+from scipy.stats import f_oneway
 from si.data.dataset import Dataset
 __all__ = ['Dataset']
 
@@ -73,7 +73,7 @@ def f_regression(dataset):
 		return: F scores and p-value"""
 
     X, y = dataset.X, dataset.y
-    correlation_coef = np.array([stats.pearsonr(X[:,1], y)[0]])#X and y are array's
+    correlation_coef = np.array([stats.pearsonr(X[:,i], y)[0] for i in range(X.shape[1])])#X and y are array's
     #Pearson correlation coefficient and p-value for testing non-correlation:
 
         #The Pearson correlation coefficient measures the linear relationship between two datasets. 
@@ -118,7 +118,7 @@ class SelectKBest:
         else:
             self.score_function = f_regression
 
-        if K <= 0:
+        if K <= 0:#Valor de K tem que ser > 0
             raise Exception("The K value must be higher than 0.")
         else:
             self.k = K
@@ -136,19 +136,20 @@ class SelectKBest:
                               "All features will be selected")
                 self.k = int(X.shape[1])#selecionar todas as features
 
+            #Seleção de features
             select_features = np.argsort(self.F_stat)[-self.k:]
-
             X_features = X[:, select_features] #:->todas as linhas, select_features -> features slecionadas
             #X_features_names = [X_names[index] for index in select_features]
             X_features_names = []
-            for index in select_features:
+            for index in range(select_features):
                 X_features_names.append(X_names[index])
+            #X_features_names = [X_names[index] for index in select_features]
 
-            if inline:
+            if inline:#Se for True vai fazer a alteração o pproprio dataset
                 dataset.X = X_features
                 dataset.xnames = X_features_names
                 return dataset
-            else:
+            else:#faz um dataset novo
                 return Dataset(X_features, copy(dataset.Y), X_features_names, copy(dataset.yname))
 
         def fit_transform(self, dataset, inline=False):

@@ -84,4 +84,10 @@ class StandardScaler:
         -------
         Dataset object
         """
-        pass
+        self.fit(dataset)
+        IT = dataset.X * np.sqrt(self.var) + self.mean
+        if inline:
+            dataset.X = IT
+            return dataset
+        else:
+            Dataset(IT, copy(dataset.Y), copy(dataset.X),copy(dataset.yname)) #copiar para nao ter de estar a verificar todas as labels

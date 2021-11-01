@@ -1,6 +1,7 @@
 import numpy as np
+import pandas as pd
 from si.util.util import label_gen
-
+from si.data.dataset import Dataset
 __all__ = ['Dataset']
 
 
@@ -94,13 +95,17 @@ class Dataset:
         else:
             fullds = dataset.X
             columns = dataset._xnames[:]
-        _means = np.mean()
+        
 
         #fullds = np.hstack((self.X, self.Y.reshape(len(self.Y), 1)))
         #np.savetxt(filename, fullds, delimiter=sep)
     def toDataframe(self):
         """ Converts the dataset into a pandas DataFrame"""
-        pass
+        if self.Y is None:
+            dataset = pd.DataFrame(self.X.copy(), columns=self._xnames[:])
+        else:
+            dataset = pd.DataFrame(np.hstack((self.X, self.Y.reshape(len(self.Y), 1))), columns=np.hstack((self._xnames, self._yname)))
+        return dataset
 
     def getXy(self):
         return self.X, self.Y
