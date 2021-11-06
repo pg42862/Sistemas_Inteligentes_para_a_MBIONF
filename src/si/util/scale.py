@@ -28,11 +28,8 @@ class StandardScaler:
         ----------
         dataset : A Dataset object to be standardized
         """
-        self.mean = np.mean(dataset.X, axis=0)
-        #[int or tuples of int]axis along which we want to calculate the arithmetic mean. 
-        #Otherwise, it will consider arr to be flattened(works on allthe axis). 
-        #axis = 0 means along the column and axis = 1 means working along the row.
-        self.var = np.var(dataset.X, axis=0)
+        self.mean = np.mean(dataset.X, axis=0)#calcula a media
+        self.var = np.var(dataset.X, axis=0)#calcula a variancia
 
     def transform(self, dataset, inline=False):
         """
@@ -47,14 +44,14 @@ class StandardScaler:
         """
         #The observation (X), the mean (μ) and the standard deviation (σ) 
         #X – μ / σ
-        Z = (dataset.X - self.mean)/np.sqrt(self.var)
+        Z = (dataset.X - self.mean)/np.sqrt(self.var)#standard score
         if inline:
             #inline: neste contexto significa que vou aplicar as alteracoes ao mesmo dataset 
             #(True: mesmo dataset, False:dif dataset)
             dataset.X = Z
             return dataset
         else:
-            return Dataset(Z, copy(dataset.Y), copy(dataset.xnames), copy(dataset.yname))
+            return Dataset(Z, copy(dataset.Y), copy(dataset._xnames), copy(dataset._yname))
 
     def fit_transform(self, dataset, inline=False):
         """
@@ -70,7 +67,7 @@ class StandardScaler:
         self.fit(dataset)
         return self.transform(dataset, inline=inline)
 
-    def inverse_transform(self, dataset, inline=False):
+    def inverse_transform(self, dataset, inline=False):#valores standadrzados para normais
         """
         Transform data back into orginal state by multiplying by standard
         deviation and adding the mean back in.

@@ -1,8 +1,6 @@
 import numpy as np
 import pandas as pd
 from si.util.util import label_gen
-from si.data.dataset import Dataset
-__all__ = ['Dataset']
 
 
 class Dataset:
@@ -13,7 +11,7 @@ class Dataset:
         if X is None:
             raise Exception("Trying to instanciate a DataSet without any data")
         self.X = X#linhas
-        self.Y = Y#colunas
+        self.Y = Y#label
         self._xnames = xnames if xnames else label_gen(X.shape[1])
         self._yname = yname if yname else 'Y'
 
@@ -63,7 +61,8 @@ class Dataset:
             X = df.to_numpy()
             Y = None
             xnames = df.columns.tolist()
-            yname = None
+            ynames = None
+        return cls(X,Y, xnames, ynames)
 
     def __len__(self):
         """Returns the number of data points."""
@@ -71,11 +70,11 @@ class Dataset:
 
     def hasLabel(self):
         """Returns True if the dataset constains labels (a dependent variable)"""
-        return self.Y
+        return self.Y is not None
 
     def getNumFeatures(self):
         """Returns the number of features"""
-        self.X.shape[1]
+        return self.X.shape[1]
 
     def getNumClasses(self):
         """Returns the number of label classes or 0 if the dataset has no dependent variable."""
@@ -109,3 +108,5 @@ class Dataset:
 
     def getXy(self):
         return self.X, self.Y
+
+
