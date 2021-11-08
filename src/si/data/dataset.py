@@ -10,8 +10,8 @@ class Dataset:
         """ Tabular Dataset"""
         if X is None:
             raise Exception("Trying to instanciate a DataSet without any data")
-        self.X = X#linhas
-        self.Y = Y#label
+        self.X = X#linhas - dados independentes
+        self.Y = Y#label dependente
         self._xnames = xnames if xnames else label_gen(X.shape[1])
         self._yname = yname if yname else 'Y'
 
@@ -33,13 +33,13 @@ class Dataset:
         #Strings in the list are treated as lines.
         #delimiter: optional. This is the string used to separate the values by default, any consecutive 
         #whitespace that occurs acts as a delimiter.
-        if labeled:
+        if labeled:#ve se tem uma label
             X = data[:, 0:-1]
             Y = data[:, -1]
         else:
             X = data
             Y = None
-        return cls(X, Y)
+        return cls(X, Y)#trasnforma X,Y numa classe Dataset
 
     @classmethod
     def from_dataframe(cls, df, ylabel=None):
@@ -52,33 +52,36 @@ class Dataset:
         :return: [description]
         :rtype: [type]
         """
-        if ylabel is not None and ylabel in df.columns:
+        if ylabel is not None and ylabel in df.columns:#ver se tem a label dependente
+            # df.loc -> acede as linhas e as colunas pelas label(s)
             X = df.loc[:,df.columns != ylabel].to_numpy()
+            #df.columns != ylabel -> menos a ylabel
+            #to_numpy() -> Convert the DataFrame to a NumPy array
             Y = df.loc[:,ylabel].to_numpy() #ou df.loc[:,df.columns == ylabel].to_numpy()
-            xnames = df.columns.to_list().remove(ylabel)
-            ynames = ylabel
-        else:
-            X = df.to_numpy()
-            Y = None
-            xnames = df.columns.tolist()
+            xnames = df.columns.to_list().remove(ylabel)#todos os nomes das colunas menos a ylabel
+            ynames = ylabel #so ylabel
+        else:# caso nao tenha label
+            X = df.to_numpy()#converte diretamente para numpy array
+            Y = None #nao tem label
+            xnames = df.columns.tolist() #nomes das variaveis independentes
             ynames = None
-        return cls(X,Y, xnames, ynames)
+        return cls(X,Y, xnames, ynames)#trasnforma X,Y numa classe Dataset
 
     def __len__(self):
         """Returns the number of data points."""
-        return self.X.shape[0]
+        return self.X.shape[0]#retorna o numero de linhas
 
     def hasLabel(self):
         """Returns True if the dataset constains labels (a dependent variable)"""
-        return self.Y is not None
+        return self.Y is not None #verifica se existe label (True or False)
 
     def getNumFeatures(self):
         """Returns the number of features"""
-        return self.X.shape[1]
+        return self.X.shape[1]#retorna o numero de colunas
 
     def getNumClasses(self):
         """Returns the number of label classes or 0 if the dataset has no dependent variable."""
-        return len(np.unique(self.Y)) if self.hasLabel() else 0
+        return len(np.unique(self.Y)) if self.hasLabel() else 0 #retorna os valores existentes na label ou 0
 
     def writeDataset(self, filename, sep=","):
         """Saves the dataset to a file
@@ -88,22 +91,26 @@ class Dataset:
         :param sep: The fields separator, defaults to ","
         :type sep: str, optional
         """
-        if dataset.hasLabel():
+        if dataset.hasLabel():#confirma se o dataset tem label
             fullds = np.hstack((self.X, self.Y.reshape(len(self.Y), 1)))
+            #np.hstack -> juntar X,y
+            #reshape em self.Y.reshape(len(self.Y): linhas e 1))) coluna -> para dar uma nova forma ao array sem mudar a data
             np.savetxt(filename, fullds, delimiter=sep)
-        else:
+        else:#se o dataset nao tive label
             fullds = dataset.X
             columns = dataset._xnames[:]
-        
 
-        #fullds = np.hstack((self.X, self.Y.reshape(len(self.Y), 1)))
-        #np.savetxt(filename, fullds, delimiter=sep)
     def toDataframe(self):
         """ Converts the dataset into a pandas DataFrame"""
-        if self.Y is None:
-            dataset = pd.DataFrame(self.X.copy(), columns=self._xnames[:])
-        else:
-            dataset = pd.DataFrame(np.hstack((self.X, self.Y.reshape(len(self.Y), 1))), columns=np.hstack((self._xnames, self._yname)))
+        if self.Y is None:#se nao tiver label
+            dataset = pd.DataFrame(self.X.copy(), columns=self._xnames[:])#convert an array to a dataframe
+            #self.X.copy() -> copia os dados das variaveis independentes
+            #columns=self._xnames[:] -> os nomes das colunas dessas variaveis
+        else:#caso tenha label
+            dataset = pd.DataFrame(np.hstack((self.X, self.Y.reshape(len(self.Y), 1))), columns=np.hstack((self._xnames, self._yname)))#convert an array to a dataframe
+            #np.hstack(junta X,Y) -> reshape em self.Y.reshape(len(self.Y): linhas e 1))) coluna
+            #columns=np.hstack((self._xnames, self._yname) -> o nome das colunas
+
         return dataset
 
     def getXy(self):

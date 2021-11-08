@@ -28,13 +28,16 @@ class StandardScaler:
         ----------
         dataset : A Dataset object to be standardized
         """
-        self.mean = np.mean(dataset.X, axis=0)#calcula a media
-        self.var = np.var(dataset.X, axis=0)#calcula a variancia
+        self.mean = np.mean(dataset.X, axis=0) #calcula a media
+        self.var = np.var(dataset.X, axis=0) #calcula a variancia
 
     def transform(self, dataset, inline=False):
         """
         Standardize data by subtracting out the mean and dividing by
         standard deviation calculated during fitting.
+
+        The observation (X), the mean (μ) and the standard deviation (σ):
+            Z = X – μ / σ
         Parameters
         ----------
         dataset : A Dataset object to be standardized
@@ -42,8 +45,6 @@ class StandardScaler:
         -------
         A Dataset object with standardized data.
         """
-        #The observation (X), the mean (μ) and the standard deviation (σ) 
-        #X – μ / σ
         Z = (dataset.X - self.mean)/np.sqrt(self.var)#standard score
         if inline:
             #inline: neste contexto significa que vou aplicar as alteracoes ao mesmo dataset 
@@ -87,4 +88,4 @@ class StandardScaler:
             dataset.X = IT
             return dataset
         else:
-            Dataset(IT, copy(dataset.Y), copy(dataset.X),copy(dataset.yname)) #copiar para nao ter de estar a verificar todas as labels
+            Dataset(IT, copy(dataset.Y), copy(dataset.X),copy(dataset.yname))

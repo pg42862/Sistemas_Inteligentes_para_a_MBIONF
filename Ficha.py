@@ -7,7 +7,7 @@ from src.si.util.util import summary
 import os
 
 DIR = os.path.dirname(os.path.realpath('.'))
-filename = os.path.join(DIR, 'Sistemas_Inteligentes_para_a_MBIONF/datasets/breast-bin.data')
+filename = os.path.join(DIR, 'SIB/datasets/breast-bin.data')
 
 ## Labeled dataset
 dataset = Dataset.from_data(filename, labeled=True)
@@ -50,7 +50,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # o dataset iris nao estava inicialmente no github
-filename = os.path.join(DIR, 'Sistemas_Inteligentes_para_a_MBIONF/datasets/iris.data')
+filename = os.path.join(DIR, 'SIB/datasets/iris.data')
 df = pd.read_csv(filename)
 iris = Dataset.from_dataframe(df,ylabel="class")
 
