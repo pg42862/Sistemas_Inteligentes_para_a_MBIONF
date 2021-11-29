@@ -9,6 +9,7 @@ import os
 DIR = os.path.dirname(os.path.realpath('.'))
 filename = os.path.join(DIR, 'SIB/datasets/breast-bin.data')
 
+print('-----------------------Labeled Dataset--------------------------')
 ## Labeled dataset
 dataset = Dataset.from_data(filename, labeled=True)
 
@@ -18,32 +19,41 @@ print(dataset.Y[:5])
 print("Has label:", dataset.hasLabel())
 print("Number of features:", dataset.getNumFeatures())
 print("Number of classes:", dataset.getNumClasses())
+print('Labeled dataset:')
 print(summary(dataset))
 
-dataset.toDataframe()
+print('dataset.toDataframe():')
+print(dataset.toDataframe())
 
+print('-----------------------Standard Scaler--------------------------')
 ## Standard Scaler
 
 from src.si.util.scale import StandardScaler
 sc = StandardScaler()
 ds2 = sc.fit_transform(dataset)
-summary(ds2)
+print('ds2 Standard Scaler:')
+print(summary(ds2))
+print('------------------Feature Selection------------------------')
 
 # Feature Selection
-
 from src.si.data.Features_Selection import f_regression, SelectKBest, VarianceThreshold
 
 ## Variance Threshold
 vt = VarianceThreshold(8)
 ds2 = vt.fit_transform(dataset)
-summary(ds2)
+print('ds2 Variance Threshold:')
+print(summary(ds2))
+
 
 ## SelectKBest
 # SelectKBest for classification
 skb = SelectKBest(5)
 ds3 = skb.fit_transform(dataset)
-summary(ds3)
+print('ds3 SelectKBest:')
+print(summary(ds3))
 
+print('---------------------------Clustering------------------------------')
+print('Plot')
 # Clustering
 from src.si.unsupervised.Clustering import Kmeans
 import pandas as pd
@@ -63,8 +73,6 @@ plt.xlabel(iris._xnames[c1])
 plt.ylabel(iris._xnames[c2])
 plt.show()
 
-
-
 kmeans = Kmeans(3)
 cent, clust = kmeans.fit_transform(iris)
 
@@ -75,15 +83,18 @@ plt.ylabel(iris._xnames[c2])
 plt.show()
 # podem obter clusterings diferentes já que estes dependem da escolha dos centroids iniciais
 
+print('-----------------------------PCA----------------------------')
 # PCA
 from src.si.unsupervised.PCA import PCA
 pca = PCA(2, using='svd')
 
 reduced = pca.fit_transform(iris)
+print('pca.explained_variances():')
 print(pca.explained_variances())
 
 iris_pca = Dataset(reduced[0],iris.Y,xnames=['pc1','pc2'],yname='class')
-iris_pca.toDataframe()
+print('iris_pcs.toDataframe():')
+print(iris_pca.toDataframe())
 
 plt.scatter(iris_pca.X[:,0], iris_pca.X[:,1])
 plt.xlabel("PC1")

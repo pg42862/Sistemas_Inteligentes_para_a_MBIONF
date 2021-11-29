@@ -1,8 +1,8 @@
-from Modelo import Modelo
+from Model import Model
 from si.util.util import l2_distance
 import numpy as np
 
-class KNN(Modelo):
+class KNN(Model):
     def __init__(self, n_neighboors, classification = True):
         super(KNN).__init__()#invocar o init do modelo
         self.n_neighboors = n_neighboors

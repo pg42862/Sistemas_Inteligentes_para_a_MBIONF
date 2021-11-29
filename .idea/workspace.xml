@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a618e89-531d-4184-864e-505bb3d8cfbb" name="Default Changelist" comment="" />
+    <list default="true" id="3a618e89-531d-4184-864e-505bb3d8cfbb" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/si/util/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/datasets/breast-bin.data" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/breast-bin.data" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/data/Features_Selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/Features_Selection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/data/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/Clustering.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/Clustering.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/PCA.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/PCA.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/util/scale.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/util/scale.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/util/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/util/util.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -88,14 +97,30 @@
       <updated>1636278764217</updated>
       <workItem from="1636278780009" duration="6006000" />
       <workItem from="1636370515167" duration="1328000" />
-      <workItem from="1636380747770" duration="10678000" />
+      <workItem from="1636380747770" duration="13452000" />
+      <workItem from="1636990735852" duration="5802000" />
+      <workItem from="1637596249153" duration="3310000" />
+      <workItem from="1638007251634" duration="86000" />
+      <workItem from="1638202340410" duration="2623000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/SIB$Ficha.coverage" NAME="Ficha Coverage Results" MODIFIED="1636385933269" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/SIB$Ficha.coverage" NAME="Ficha Coverage Results" MODIFIED="1636990886407" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

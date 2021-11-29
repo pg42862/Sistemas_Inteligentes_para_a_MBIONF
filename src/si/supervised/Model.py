@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-class Modelo(ABC):
+class Model(ABC):
     def __init__(self):
         self.is_fitted = False
 
