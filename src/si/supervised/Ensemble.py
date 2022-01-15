@@ -9,7 +9,7 @@ def average(values):
 
 class Ensemble(Model):
     def __init__(self, models, fvote, score):
-        super().__init__()
+        super(Ensemble, self).__init__()
         self.models = models
         self.fvote = fvote
         self.score = score
@@ -21,13 +21,14 @@ class Ensemble(Model):
         self.is_fitted = True
 
     def predict(self, x):
-        assert self.is_fitted, 'Model must be fit before predicting'
+        assert self.is_fitted, 'Model not fitted'
         preds = [model.predict(x) for model in self.models]
         vote = self.fvote(preds)
         return vote
 
-    def cost(self, X = None, Y = None):
+    def cost(self, X=None, Y=None):
         X = X if X is not None else self.dataset.X
         Y = Y if Y is not None else self.dataset.Y
-        y_pred = np.ma.apply_along_axis(self.predict, axis = 0, arr = X.T)
-        return self.score(Y, y_pred)
+
+        Y_pred = np.ma.apply_along_axis(self.predict, axis=0, arr=X.T)
+        return self.score(Y, Y_pred)

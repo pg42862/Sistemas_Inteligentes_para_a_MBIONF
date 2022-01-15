@@ -1,66 +1,65 @@
-from ..util.util import train_test_split
+from .util import train_test_split
 import numpy as np
 import itertools
 
 class CrossValidationScore:
-    def __init__(self, model, dataset, **kwargs):
+
+    def __init__(self, model, dataset, score=None, **kwargs):
         self.model = model
         self.dataset = dataset
-        self.cv = kwargs.get('cv',3)
-        self.split = kwargs.get('split',0.8)
-        self.train_scores= None
+        self.score = score
+        self.cv = kwargs.get('cv', 3)
+        self.split = kwargs.get('split', 0.8)
+        self.train_scores = None
         self.test_scores = None
         self.ds = None
 
     def run(self):
-        train_score = []
-        test_score = []
-        ds = []
-        for _ in range(self.cv): #O _ serve para representação do valor não variável (não guarda)
+        train_scores = []
+        test_scores = []
+        ds = []  # guardar datasets
+        true_Y, pred_Y = [], []  #
+        for _ in range(self.cv):
             train, test = train_test_split(self.dataset, self.split)
             ds.append((train, test))
             self.model.fit(train)
             if not self.score:
-                train_score.append(self.model.cost())
-                test_score.append(self.model.cost(test.X, test.Y))
+                train_scores.append(self.model.cost())
+                test_scores.append(self.model.cost(test.X, test.Y))
+                pred_Y.extend(list(self.model.predict(test.X)))  #
             else:
-                y_train = np.ma.apply_along_axis(self.model.predict, axis = 0, arr = train.X.T)
-                train_score.append(self.score(train.Y, y_train))
-                y_test = np.ma.apply_along_axis(self.model.predict, axis = 0, arr = train.X.T)
-                test_score.append(self.score(train.Y, y_train))
-        self.train_score = train_score #Guarda os dados que estavam escritos anteriormente de forma a preservar os mesmos
-        self.test_score = test_score #Guarda os dados que estavam escritos anteriormente de forma a preservar os mesmos
-        self.ds = ds
-        return train_score, test_score
+                Y_train = np.ma.apply_along_axis(self.model.predict, axis=0, arr=train.X.T)
+                train_scores.append(self.score(train.Y, Y_train))
+                Y_test = np.ma.apply_along_axis(self.model.predict, axis=0, arr=test.X.T)
+                test_scores.append(self.score(test.Y, Y_test))
+                pred_Y.extend(list(Y_test))  #
+            true_Y.extend(list(test.Y))  #
 
-    def toDataFrame(self):
+        self.train_scores = train_scores
+        self.test_scores = test_scores
+        self.ds = ds
+        self.true_Y = np.array(true_Y)  #
+        self.pred_Y = np.array(pred_Y)  #
+        return train_scores, test_scores
+
+    def toDataframe(self):
         import pandas as pd
-        assert self.train_scores and self.test_scores, "Need to run function"
-        return pd.DataFrame({"Train Scores:" : self.train_scores, "Test Scores:" : self.test_scores})
+        assert self.train_scores and self.test_scores, "Need to run first."
+        return pd.DataFrame({'Train Scores': self.train_scores, 'Test Scores': self.test_scores})
+
 
 class GridSearchCV:
+
     def __init__(self, model, dataset, parameters, **kwargs):
-        """
-        :param model:
-        :param dataset:
-        :param parameters: dictionary with parameters
-        :param kwargs:
-        """
         self.model = model
         self.dataset = dataset
-        hasparam = []
-        hasparam = [hasattr(self.model, param) for param in parameters] #lista com os parametros
-        #The hasattr() method returns true if an object has the given named attribute and false if it does not.
-
-        if np.all(hasparam):#se todos forem atributos - True
+        hasparam = [hasattr(self.model, param) for param in parameters]
+        if np.all(hasparam):
             self.parameters = parameters
-        else: # se houver algum que nao seja atributo (nao existir) vai dar um erro
+        else:
             index = hasparam.index(False)
-            #The index() method returns the index of the specified element in the list.
             keys = list(parameters.keys())
-            #Dictionary1 = {'A': 'Geeks', 'B': 'For', 'C': 'Geeks'} -> dict_keys(['A', 'B', 'C'])
-            #returns a view object that displays a list of all the keys in the dictionary in order of insertion.
-            raise ValueError(f'Warning parameters: {keys[index]}')
+            raise ValueError(f'Wrong parameters: {keys[index]}')
         self.kwargs = kwargs
         self.results = None
 
@@ -70,14 +69,14 @@ class GridSearchCV:
         values = list(self.parameters.values())
         for conf in itertools.product(*values):
             for i in range(len(attrs)):
-                setattr(self.model, attrs[i],conf[i])
+                setattr(self.model, attrs[i], conf[i])
             scores = CrossValidationScore(self.model, self.dataset, **self.kwargs).run()
-            self.results.append((conf,scores))
+            self.results.append((conf, scores))
         return self.results
 
     def toDataframe(self):
         import pandas as pd
-        assert self.results, "The grid search needs to be ran."
+        assert self.results, 'The grid search needs to be ran first'
         data = dict()
         for i, k in enumerate(self.parameters.keys()):
             v = []
@@ -89,6 +88,6 @@ class GridSearchCV:
             for r in self.results:
                 treino.append(r[1][0][i])
                 teste.append(r[1][1][i])
-            data['Train ' + str(i + 1)] = treino
-            data['Test ' + str(i + 1)] = teste
+            data['Train ' + str(i+1)] = treino
+            data['Test ' + str(i+1)] = teste
         return pd.DataFrame(data)

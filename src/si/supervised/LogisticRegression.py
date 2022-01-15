@@ -37,14 +37,26 @@ class LogisticRegression(Model):
         return sigmoid(np.dot(self.theta, _x))
 
     def predict(self, x):
-        p = self.probability(x)
-        res = 1 if p >= 0.5 else 0
+        x = np.array(x)
+        if x.ndim > 1:
+            res = []
+            for i in x:
+                p = self.probability(i)
+                pred = 1 if p >= 0.5 else 0
+                res.append(pred)
+        else:
+            p = self.probability(x)
+            res = 1 if p >= 0.5 else 0
         return res
 
-    def cost(self):
-        h = sigmoid(np.dot(self.X, self.theta))
-        cost = (-self.Y * np.log(h) - (1 - self.Y) * np.log(1 - h))
-        res = np.sum(cost) / self.X.shape[0]
+    def cost(self, X=None, Y=None, theta=None):
+        X = add_intersect(X) if X is not None else self.X  # criar funçao de
+        Y = Y if Y is not None else self.Y
+        theta = theta if theta is not None else self.theta
+
+        h = sigmoid(np.dot(X, theta))
+        cost = (-Y * np.log(h) - (1 - Y) * np.log(1 - h))
+        res = np.sum(cost) / X.shape[0]
         return res
 
 

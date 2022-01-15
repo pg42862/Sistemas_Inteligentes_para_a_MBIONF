@@ -30,14 +30,14 @@ class DecisionTree(Model):
         # Decision tree itself
         self.Tree = None
 
-    def nodeProbas(self, Y):
+    def nodeProbas(self, y):
         '''
         Calculates probability of class in a given node
         '''
         probas = []
         # for each unique label calculate the probability for it
         for one_class in self.classes:
-            proba = Y[Y == one_class].shape[0] / Y.shape[0]
+            proba = y[y == one_class].shape[0] / y.shape[0]
             probas.append(proba)
         return np.asarray(probas)
 
@@ -45,13 +45,13 @@ class DecisionTree(Model):
         '''Calculates gini criterion'''
         return 1 - np.sum(probas**2)
 
-    def calcImpurity(self, Y):
+    def calcImpurity(self, y):
         '''Wrapper for the impurity calculation. Calculates probas first and then passses them
         to the Gini criterion.
         '''
-        return self.gini(self.nodeProbas(Y))
+        return self.gini(self.nodeProbas(y))
 
-    def calcBestSplit(self, X, Y):
+    def calcBestSplit(self, X, y):
         '''Calculates the best possible split for the concrete node of the tree'''
 
         bestSplitCol = None
@@ -67,8 +67,8 @@ class DecisionTree(Model):
             # for each value in the column
             for x_i in x_col:
                 threshold = x_i
-                y_right = Y[x_col > threshold]
-                y_left = Y[x_col <= threshold]
+                y_right = y[x_col > threshold]
+                y_left = y[x_col <= threshold]
 
                 if y_right.shape[0] == 0 or y_left.shape[0] == 0:
                     continue
@@ -79,8 +79,8 @@ class DecisionTree(Model):
 
                 # calculate information gain
                 infoGain = impurityBefore
-                infoGain -= (impurityLeft * y_left.shape[0] / Y.shape[0]) + \
-                    (impurityRight * y_right.shape[0] / Y.shape[0])
+                infoGain -= (impurityLeft * y_left.shape[0] / y.shape[0]) + \
+                    (impurityRight * y_right.shape[0] / y.shape[0])
 
                 # is this infoGain better then all other?
                 if infoGain > bestInfoGain:
@@ -96,11 +96,11 @@ class DecisionTree(Model):
 
         x_col = X[:, bestSplitCol]
         x_left, x_right = X[x_col <= bestThresh, :], X[x_col > bestThresh, :]
-        y_left, y_right = Y[x_col <= bestThresh], Y[x_col > bestThresh]
+        y_left, y_right = y[x_col <= bestThresh], y[x_col > bestThresh]
 
         return bestSplitCol, bestThresh, x_left, y_left, x_right, y_right
 
-    def buildDT(self, X, Y, node):
+    def buildDT(self, X, y, node):
         '''
         Recursively builds decision tree from the top to bottom
         '''
@@ -113,12 +113,12 @@ class DecisionTree(Model):
             node.is_terminal = True
             return
 
-        if np.unique(Y).shape[0] == 1:
+        if np.unique(y).shape[0] == 1:
             node.is_terminal = True
             return
 
         # calculating current split
-        splitCol, thresh, x_left, y_left, x_right, y_right = self.calcBestSplit(X, Y)
+        splitCol, thresh, x_left, y_left, x_right, y_right = self.calcBestSplit(X, y)
 
         if splitCol is None:
             node.is_terminal = True
@@ -145,17 +145,17 @@ class DecisionTree(Model):
 
     def fit(self, dataset):
         self.dataset = dataset
-        X, Y = dataset.getXy()
+        X, y = dataset.getXy()
         # the dataset classes
-        self.classes = np.unique(Y)
+        self.classes = np.unique(y)
         # root node creation
         self.Tree = Node()
         self.Tree.depth = 1
-        self.Tree.probas = self.nodeProbas(Y)
-        self.buildDT(X, Y, self.Tree)
+        self.Tree.probas = self.nodeProbas(y)
+        self.buildDT(X, y, self.Tree)
         self.is_fitted = True
 
-    def predictSample(self, X, node):
+    def predictSample(self, x, node):
         '''
         Passes one object through decision tree and return the probability of it to belong to each class
         '''
@@ -165,20 +165,20 @@ class DecisionTree(Model):
             return node.probas
 
         if x[node.column] > node.threshold:
-            probas = self.predictSample(X, node.right)
+            probas = self.predictSample(x, node.right)
         else:
-            probas = self.predictSample(X, node.left)
+            probas = self.predictSample(x, node.left)
         return probas
 
-    def predict(self, X):
+    def predict(self, x):
         assert self.is_fitted, 'Model must be fit before predicting'
-        pred = np.argmax(self.predictSample(X, self.Tree))
+        pred = np.argmax(self.predictSample(x, self.Tree))
         return pred
 
-    def cost(self, X=None, Y=None):
+    def cost(self, X=None, y=None):
         X = X if X is not None else self.dataset.X
-        Y = Y if Y is not None else self.dataset.Y
+        y = y if y is not None else self.dataset.Y
 
         y_pred = np.ma.apply_along_axis(self.predict,
                                         axis=0, arr=X.T)
-        return accuracy_score(Y, y_pred)
+        return accuracy_score(y, y_pred)
