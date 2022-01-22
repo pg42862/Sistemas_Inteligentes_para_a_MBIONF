@@ -1,5 +1,5 @@
 from .Model import Model
-from ..util.util import accuracy_score
+from ..util.metrics import accuracy_score
 import numpy as np
 
 

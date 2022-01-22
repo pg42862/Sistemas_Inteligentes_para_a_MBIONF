@@ -2,10 +2,12 @@ from.Model import Model
 import numpy as np
 
 def majority(values):
-    return max(set(values), key = values.count)
+    return max(set(values), key=values.count)
+
 
 def average(values):
     return sum(values)/len(values)
+
 
 class Ensemble(Model):
     def __init__(self, models, fvote, score):
@@ -23,6 +25,7 @@ class Ensemble(Model):
     def predict(self, x):
         assert self.is_fitted, 'Model not fitted'
         preds = [model.predict(x) for model in self.models]
+        print(preds)
         vote = self.fvote(preds)
         return vote
 

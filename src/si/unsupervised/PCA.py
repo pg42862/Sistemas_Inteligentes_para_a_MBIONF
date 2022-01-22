@@ -2,7 +2,7 @@ import numpy as np
 from scipy import stats
 from  copy import copy
 import warnings
-from si.util.scale import StandardScaler
+from si.data.scale import StandardScaler
 
 class PCA:
     """

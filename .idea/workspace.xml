@@ -1,16 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a618e89-531d-4184-864e-505bb3d8cfbb" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/si/util/metrics.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/datasets/breast-bin.data" beforeDir="false" afterPath="$PROJECT_DIR$/datasets/breast-bin.data" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/si/data/Features_Selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/Features_Selection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/si/data/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/Clustering.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/Clustering.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/PCA.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/PCA.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/si/util/scale.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/util/scale.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/si/util/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/util/util.py" afterDir="false" />
-    </list>
+    <list default="true" id="3a618e89-531d-4184-864e-505bb3d8cfbb" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,6 +100,7 @@
       <workItem from="1639677747087" duration="3000" />
       <workItem from="1641227858628" duration="1541000" />
       <workItem from="1641831288387" duration="2949000" />
+      <workItem from="1642861604577" duration="5634000" />
     </task>
     <servers />
   </component>

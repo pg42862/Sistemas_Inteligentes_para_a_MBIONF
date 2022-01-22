@@ -3,6 +3,7 @@ from ..util.util import sigmoid, add_intersect
 import numpy as np
 
 class LogisticRegression(Model):
+
     def __init__(self, gd=False, epochs=1000, lr=0.1):
         super(LogisticRegression, self).__init__()
         self.gd = gd
@@ -55,7 +56,7 @@ class LogisticRegression(Model):
         theta = theta if theta is not None else self.theta
 
         h = sigmoid(np.dot(X, theta))
-        cost = (-Y * np.log(h) - (1 - Y) * np.log(1 - h))
+        cost = (-Y * np.log(h) - (1-Y) * np.log(1-h))
         res = np.sum(cost) / X.shape[0]
         return res
 
@@ -75,7 +76,7 @@ class LogisticRegressionReg(LogisticRegression):
             z = np.dot(x, self.theta)
             h = sigmoid(z)
             grad = np.dot(x.T, (h - y)) / y.size
-            grad[1:] = grad[1:] + (self.lbd / m) * self.theta[1:]
+            grad[1:] = grad[1:] + (self.lbd/m) * self.theta[1:]
             self.theta -= self.lr * grad
             self.history[epoch] = [self.theta[:], self.cost()]
 
@@ -86,7 +87,7 @@ class LogisticRegressionReg(LogisticRegression):
 
         m = X.shape[0]
         p = sigmoid(np.dot(X, theta))
-        cost = (-Y * np.log(p) - (1 - Y) * np.log(1 - p))
-        reg = np.dot(theta[1:], theta[1:]) * self.lbd / (2 * m)
+        cost = (-Y * np.log(p) - (1-Y) * np.log(1-p))
+        reg = np.dot(theta[1:], theta[1:]) * self.lbd / (2*m)
         res = (np.sum(cost) / m) + reg
         return res
