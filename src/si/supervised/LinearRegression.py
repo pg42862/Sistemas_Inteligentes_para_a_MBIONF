@@ -13,7 +13,7 @@ class LinearRegression(Model):
         self.lr = lr
 
     def fit(self, dataset):
-        X, Y = dataset.getXy()
+        X, Y = dataset.getXy()#vai buscar X e y do dataset
         X = np.hstack((np.ones((X.shape[0], 1)), X))
         self.X = X
         self.Y = Y
@@ -41,7 +41,7 @@ class LinearRegression(Model):
     def predict(self, x):
         assert self.is_fitted, 'Model must be fitted before predicting'
         x = np.array(x)
-        if x.ndim > 1:
+        if x.ndim > 1:#ndim: numero de dimensoes
             res = []
             for i in x:
                 _x = np.hstack(([1], i))

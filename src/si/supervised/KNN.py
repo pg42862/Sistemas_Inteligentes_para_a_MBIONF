@@ -10,10 +10,11 @@ class KNN(Model):
         self.classification = classification
 
     def fit(self, dataset):
+        """"""
         self.dataset = dataset
         self.is_fitted = True
 
-    def get_neighbors(self, x):
+    def get_neighbors(self, x):# x e um numero
         distances = euclidean(x, self.dataset.X)
         sorted_index = np.argsort(distances)#os indices vao ser postos por ordem crescente
         return sorted_index[:self.num_neighbors]#ate aos neighboors especificados
@@ -21,7 +22,7 @@ class KNN(Model):
     def predict(self, x):
         assert self.is_fitted, 'Model must be fit before predicting'
         neighbors = self.get_neighbors(x)#obtem os neighboors (pontos mais proximos)
-        values = self.dataset.y[neighbors].tolist()
+        values = self.dataset.y[neighbors].tolist()#vai escolher os neighboors e passa para lista
         if self.classification:
             prediction = max(set(values), key=values.count)#retorna o que tem o valor maximo da label (a label que se repete mais vezes)
         else:

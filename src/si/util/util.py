@@ -54,7 +54,7 @@ def sigmoid(x):
     return 1/(1+np.exp(-x))
 
 def add_intersect(X):
-    return np.hstack((np.ones((X.shape[0],1))),X)
+    return np.hstack((np.ones((X.shape[0], 1)), X))
 
 def to_categorical(y, num_classes=None, dtype='float32'):
     y = np.array(y, dtype='int')

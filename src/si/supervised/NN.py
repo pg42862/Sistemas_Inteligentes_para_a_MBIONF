@@ -67,7 +67,7 @@ class Activation(Layer):
         return np.multiply(self.activation.prime(self.input), output_error)
 
 
-class NN(Model):
+class NN(Model):#neural networks
 
     def __init__(self, epochs=1000, lr=0.01, verbose=True):
         super(NN, self).__init__()
@@ -78,6 +78,10 @@ class NN(Model):
         self.layers = []
         self.loss = mse
         self.loss_prime = mse_prime
+
+    def useLoss(self, loss, loss_prime):
+        self.loss = loss
+        self.loss_prime = loss_prime
 
     def add(self, layer):
         self.layers.append(layer)
@@ -116,7 +120,8 @@ class NN(Model):
             self.history_batch = np.zeros((1, batchsize))
             for batch in range(n_batches):
                 output = X[batch * batchsize:(batch + 1) * batchsize, ]
-
+                #X[vai buscar o numero de linhas]
+                #The batch size defines the number of samples that will be propagated through the network.
                 # forward propagation
                 for layer in self.layers:
                     output = layer.forward(output)
@@ -134,7 +139,7 @@ class NN(Model):
                 print(f'epoch {epoch + 1}/{self.epochs}, error = {self.history[epoch]}')
             else:
                 print(f"epoch {epoch + 1}/{self.epochs}, error = {self.history[epoch]}", end='\r')
-        self.is_fitted = True #não estava a funcionar sem quebrar o ciclo for em qualquer ponto
+        self.is_fitted = True
 
     def predict(self, x):
         assert self.is_fitted, "Model must be fitted before prediction"
@@ -241,13 +246,12 @@ class Pooling2D(Layer):
         h_out, w_out = int(h_out), int(w_out)
 
         X_reshaped = input.reshape(n * d, h, w, 1)
-        # TODO: alguém que arranje a im2col
-        self.X_col = im2col(X_reshaped, self.size, self.size, pad=0, stride=self.stride)  # im2col está errada. A fun que o prof deu nao é a mesma que usou
+        self.X_col = im2col(X_reshaped, (self.size, self.size, d, d), pad=0, stride=self.stride)
 
         out, self.max_idx = self.pool(self.X_col)
 
-        out = out.reshape(h_out, w_out, n, d)
-        out = out.transpose(3, 2, 0, 1)
+        out = out.reshape(d, h_out, w_out, n)
+        out = out.transpose(3, 1, 2, 0)
 
         return out
 
@@ -258,45 +262,18 @@ class Pooling2D(Layer):
         dout_col = erro.transpose(1, 2, 3, 0).ravel()
 
         dX = self.dpool(dX_col, dout_col, self.max_idx)
-        # TODO: alguém que arranje a col2im
-        dX = col2im(dX, (n * d, h, w, 1), self.size, self.size, pad=0, stride=self.stride)  # col2im está errada. A fun que o prof deu nao é a mesma que usou
+        dX = col2im(dX, (n * d, h, w, 1), (self.size, self.size, d, d), pad=0, stride=self.stride)
         dX = dX.reshape(self.X_shape)
 
         return dX
 
 class MaxPooling2D(Pooling2D):
 
-    def pool(X_col):
+    def pool(self, X_col):
         max_idx = np.argmax(X_col, axis=0)
         out = X_col[max_idx, range(max_idx.size)]
         return out, max_idx
 
-    def dpool(dX_col, dout_col, pool_cache):
+    def dpool(self, dX_col, dout_col, pool_cache):
         dX_col[pool_cache, range(dout_col.size)] = dout_col
         return dX_col
-
-
-class MaxPoling(Layer):
-    def __init__(self, region_shape):
-        self.region_h, self.region_w = region_shape
-
-    def forward(self, input_data):
-        self.X_input = input_data
-        _, self.input_h, self.input_w, self.input_f = input_data.shape
-
-        self.out_h = self.input_h // self.region_h
-        self.out_w = self.input_w // self.region_w
-        output = np.zeros((self.out_h, self.out_w, self.input_f))
-
-        for image, i, j in self.iterate_regions():
-            output[i, j] = np.amax(image)
-        return output
-
-    def backward(self, output_error, lr):
-        pass
-
-    def iterate_regions(self):
-        for i in range(self.out_h):
-            for j in range(self.out_w):
-                image = self.X_input[(i * self.region_h): (i * self.region_h + 2), (j * self.region_h):(j * self.region_h + 2)]
-                yield image, i, j
