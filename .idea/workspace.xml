@@ -1,7 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="3a618e89-531d-4184-864e-505bb3d8cfbb" name="Default Changelist" comment="" />
+    <list default="true" id="3a618e89-531d-4184-864e-505bb3d8cfbb" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/si/util/metrics.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/data/Features_Selection.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/Features_Selection.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/data/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/data/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/data/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/supervised/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/supervised/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/Clustering.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/Clustering.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/PCA.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/PCA.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/unsupervised/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/unsupervised/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/util/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/util/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/util/scale.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/si/util/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/si/util/util.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -102,7 +114,12 @@
       <workItem from="1641831288387" duration="2949000" />
       <workItem from="1642861604577" duration="6603000" />
       <workItem from="1642875178360" duration="5791000" />
-      <workItem from="1642881945185" duration="561000" />
+      <workItem from="1642881945185" duration="846000" />
+      <workItem from="1642882817312" duration="93000" />
+      <workItem from="1643013754813" duration="20721000" />
+      <workItem from="1643044523144" duration="2165000" />
+      <workItem from="1643391035681" duration="48000" />
+      <workItem from="1643391451530" duration="3000" />
     </task>
     <servers />
   </component>

@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 def accuracy_score(y_true, y_pred):
     """Classification performance metric compute the accuracy of y_true and y_pred
@@ -13,7 +14,7 @@ def accuracy_score(y_true, y_pred):
     accuracy = correct/len(y_true)
     return accuracy
 
-def mse(y_true, y_pred, squared = True):
+def mse(y_true, y_pred, squared = True):#Mean squared error
     """Mean squared errir regression loss fucntion.
     Parameters
     :param numpy.array y_true: array like of shape (n samples,)"""
